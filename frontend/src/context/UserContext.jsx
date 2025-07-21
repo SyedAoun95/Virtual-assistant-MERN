@@ -21,7 +21,7 @@ const UserProvider = ({ children }) => {
     handleCurrentUser()
   },[])
 const value={
- serverUrl
+ serverUrl, userData ,setUserData
 }
   return (
     <div>
