@@ -9,9 +9,15 @@ import image6 from "../assets/image6.jpeg"
 import image7 from "../assets/image7.jpeg"
 function Customize() {
   return (
-    <div  className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353]'>
-   <div className='w-[90%] max-w-[60%] flex justify-center items-center flex-wrap'>
+    <div  className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center flex-col'>
+   <div className='w-[90%] max-w-[60%] flex justify-center items-center flex-wrap gap-[20px]'>
     <Card image={image1}/>
+    <Card image={image2}/>
+    <Card image={image3}/>
+    <Card image={image4}/>
+    <Card image={image5}/>
+    <Card image={image6}/>
+    <Card image={image7}/>
     </div>
     </div>
   )
