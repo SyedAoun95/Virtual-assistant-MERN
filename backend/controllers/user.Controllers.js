@@ -13,6 +13,6 @@ export const getCurrentUser = async (req, res) => {
     return res.status(200).json(user); // ✅ Return the user
   } catch (error) {
     console.error("getCurrentUser error:", error);
-    return res.status(500).json({ message: "Get current user error", error: error.message });aaaaaa
+    return res.status(500).json({ message: "Get current user error", error: error.message });
   }
 };
