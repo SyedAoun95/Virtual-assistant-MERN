@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import Card from '../components/Card'
 import image1 from "../assets/image1.png"
 import image2 from "../assets/image2.jpg"
@@ -8,10 +8,15 @@ import image5 from "../assets/image5.png"
 import image6 from "../assets/image6.jpeg"
 import image7 from "../assets/image7.jpeg"
 import { RiImageAddLine } from "react-icons/ri";
+import { userDataContext } from '../context/userContext'
 function Customize() {
-    const[frontendImage,setfrontendimage]=useState(null)
-     const[backendImage,setbackendimage]=useState(null)
+  const { serverUrl, userData ,setUserData ,frontendImage,setfrontendimage ,backendImage,setbackendimage,selectedImage,setSelectedImage}=useContext(userDataContext)
      const inputImage =useRef()
+const handleImage=(e)=>{
+    const file=e.target.files[0]
+    setbackendimage(file)
+    setfrontendimage(URL.createObjectURL(file))
+}
   return (
     <div  className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center flex-col'>
      <h1 className='text-white text-[30px] text-center p-[20px] mb-[30px]'>Select your <span className='text-blue-300'>Assistant image</span></h1>
@@ -26,11 +31,12 @@ function Customize() {
      <div className=' w-[70px] h-[160px] lg:w-[140px] lg:h-[250px] border-2 border-[#0000ff5f] rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-blue-700 cursor-pointer hover:border-4 hover:border-white flex items-center justify-center' onClick={()=>{
         inputImage.current.click()
      }}>
-     <RiImageAddLine className='text-white w-[25px] h-[25px]' />
+        {!frontendImage && <RiImageAddLine className='text-white text-[30px]'/>}
+     {frontendImage && <img src={frontendImage} className='w-full h-full object-cover'/>}
 
     </div>
     {/* gets the selected image and sets it to the state and thn we have added the usestate for images and a useref */}
-   <input type="file" accept='image/*' ref={inputImage} hidden/>  /
+   <input type="file" accept='image/*' ref={inputImage} hidden onChange={handleImage}/>  /
     </div>
         <button className='min-w-[150px] mt-[30px] h-[60px] text-[18px] bg-white text-black font-semibold rounded-full'>Next</button>
     </div>
