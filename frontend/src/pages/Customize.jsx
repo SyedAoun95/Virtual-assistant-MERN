@@ -10,7 +10,9 @@ import image7 from "../assets/image7.jpeg"
 function Customize() {
   return (
     <div  className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353]'>
+   <div className='w-[90%] max-w-[60%] flex justify-center items-center flex-wrap'>
     <Card image={image1}/>
+    </div>
     </div>
   )
 }
