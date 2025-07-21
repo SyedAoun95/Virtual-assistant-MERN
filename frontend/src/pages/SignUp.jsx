@@ -33,6 +33,7 @@ function SignUp() {
       setLoading(false)
 
       setTimeout(() => navigate("/signin"), 2000);
+      navigate("/customize")
     } catch (error) {
       console.error(" Signup error:", error.response?.data || error.message);
       setErrorMessage(error.response?.data?.message || "Signup failed");

@@ -28,7 +28,7 @@ setUserData(result.data)
       setLoading(false)
       setSuccessMessage("Login successful! Redirecting...");
       setErrorMessage("");
-
+  navigate("/")
       setTimeout(() => navigate("/"), 2000); // redirect to homepage
     } catch (error) {
       console.error("❌ Signin error:", error.response?.data || error.message);
