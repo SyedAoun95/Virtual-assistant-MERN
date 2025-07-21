@@ -9,9 +9,11 @@ import image6 from "../assets/image6.jpeg"
 import image7 from "../assets/image7.jpeg"
 import { RiImageAddLine } from "react-icons/ri";
 import { userDataContext } from '../context/userContext'
+import { useNavigate } from 'react-router-dom'
 function Customize() {
   const { serverUrl, userData ,setUserData ,frontendImage,setfrontendimage ,backendImage,setbackendimage,selectedImage,setSelectedImage}=useContext(userDataContext)
      const inputImage =useRef()
+     const navigate=useNavigate()
 const handleImage=(e)=>{
     const file=e.target.files[0]
     setbackendimage(file)
@@ -28,17 +30,20 @@ const handleImage=(e)=>{
     <Card image={image5}/>
     <Card image={image6}/>
     <Card image={image7}/>
-     <div className=' w-[70px] h-[160px] lg:w-[140px] lg:h-[250px] border-2 border-[#0000ff5f] rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-blue-700 cursor-pointer hover:border-4 hover:border-white flex items-center justify-center' onClick={()=>{
-        inputImage.current.click()
+     <div className={` w-[70px] h-[160px] lg:w-[140px] lg:h-[250px] border-2 border-[#0000ff5f] rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-blue-700 cursor-pointer hover:border-4 hover:border-white flex items-center justify-center${selectedImage=="input"?"border-4 border-white shadow-2xl shadow-blue-700":null}`} onClick={()=>{
+       { inputImage.current.click()
+        setSelectedImage("input")
+       }
      }}>
         {!frontendImage && <RiImageAddLine className='text-white text-[30px]'/>}
      {frontendImage && <img src={frontendImage} className='w-full h-full object-cover'/>}
-
+ 
     </div>
     {/* gets the selected image and sets it to the state and thn we have added the usestate for images and a useref */}
    <input type="file" accept='image/*' ref={inputImage} hidden onChange={handleImage}/>  /
     </div>
-        <button className='min-w-[150px] mt-[30px] h-[60px] text-[18px] bg-white text-black font-semibold rounded-full'>Next</button>
+    {selectedImage &&  <button className='min-w-[150px] mt-[30px] h-[60px] text-[18px] bg-white text-black font-semibold rounded-full cursor-pointer'onClick={()=>navigate("/customize2")}>Next</button>}
+       
     </div>
   )
 }
