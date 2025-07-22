@@ -5,16 +5,16 @@ import axios from 'axios';
 function Customize2() {
   const { userData, backendImage, selectedImage, serverUrl, setUserData } = useContext(userDataContext);
   const [assistantName, setAssistantName] = useState(userData?.assistantName || "");
+  const [loading,setLoading]=useState(false)
 
   const handleUpdateAssistant = async () => {
     try {
       let formData = new FormData();
-      formData.append("assistantName", assistantName)
+      formData.append("assistantName", assistantName);
       if (backendImage) {
-        formData.append("assistantImage", backendImage)
+        formData.append("AssistantImage", backendImage);
       } else {
-        // formData.append("imageUrl", selectedImage);
-        formData.append("imageUrl",selectedImage)
+        formData.append("imageUrl", selectedImage);
       }
 
       const result = await axios.post(`${serverUrl}/api/user/update`, formData, {
@@ -44,12 +44,13 @@ function Customize2() {
       />
 
       {assistantName && (
-        <button
-          className='min-w-[300px] mt-[30px] h-[60px] text-[18px] bg-white text-black font-semibold rounded-full cursor-pointer'
-          onClick={handleUpdateAssistant} 
-        >
-          Finally Create your Assistant
-        </button>
+     <button
+  className='min-w-[300px] mt-[30px] h-[60px] text-[18px] bg-white text-black font-semibold rounded-full cursor-pointer'
+  disabled={loading}
+  onClick={handleUpdateAssistant}
+>
+  {loading ? "Loading..." : "Finally Create your Assistant"}
+</button>
       )}
     </div>
   );
