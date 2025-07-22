@@ -15,4 +15,5 @@ export const getCurrentUser = async (req, res) => {
     console.error("getCurrentUser error:", error);
     return res.status(500).json({ message: "Get current user error", error: error.message });
   }
-};
+}
+
