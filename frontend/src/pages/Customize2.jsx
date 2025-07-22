@@ -2,8 +2,9 @@ import React, { useContext, useState } from 'react'
 import { userDataContext } from '../context/userContext'
 
 function Customize2() {
-  const {userData}=useContext(userDataContext)
+  const {userData,backendImage,selectedImage}=useContext(userDataContext)
   const[AssistantName,setAssistantName]=useState(userData?.AssistantName || "")
+ 
   return (
     <div className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center flex-col'>
        <h1 className='text-white text-[30px] text-center p-[20px] mb-[10px]'>Select your <span className='text-blue-300'>Assistant name</span></h1>
