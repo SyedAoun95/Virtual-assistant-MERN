@@ -11,7 +11,7 @@ export const getCurrentUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    return res.status(200).json(user); // ✅ Return the user
+    return res.status(200).json(user); 
   } catch (error) {
     console.error("getCurrentUser error:", error);
     return res.status(500).json({ message: "Get current user error", error: error.message });
@@ -21,14 +21,14 @@ export const getCurrentUser = async (req, res) => {
 export const updateAssistant=async (req,res)=>{
   try {
     const {assistantName,imageUrl}=req.body
-    let assistanceImage;
+    let assistantImage;
     if(req.file){
-      assistanceImage=await uploadOnCloudinary(req.file.path)
+      assistantImage=await uploadOnCloudinary(req.file.path)
     }else{
-      assistanceImage=imageUrl
+       assistantImage=imageUrl
     }
      const user=await User.findByIdAndUpdate(req.userId,{
-     assistantName,assistanceImage
+     assistantName,assistantImage
      },{new:true}).select("-password")
      return res.status(200).json(user)
 
