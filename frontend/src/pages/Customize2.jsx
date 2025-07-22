@@ -9,11 +9,12 @@ function Customize2() {
   const handleUpdateAssistant = async () => {
     try {
       let formData = new FormData();
-      formData.append("assistantName", assistantName);
+      formData.append("assistantName", assistantName)
       if (backendImage) {
-        formData.append("AssistantImage", backendImage);
+        formData.append("assistantImage", backendImage)
       } else {
-        formData.append("imageUrl", selectedImage);
+        // formData.append("imageUrl", selectedImage);
+        formData.append("imageUrl",selectedImage)
       }
 
       const result = await axios.post(`${serverUrl}/api/user/update`, formData, {

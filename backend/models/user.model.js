@@ -18,6 +18,10 @@ assistantName:{
     type:String, 
    
 },
+assistantImage:{
+    type:String, 
+   
+},
 history:[
     {type:String}
 ]
