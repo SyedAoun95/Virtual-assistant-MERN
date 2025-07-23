@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.routes.js"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import userRouter from "./routes/user.routes.js";
+import geminiResponse from "./gemini.js";
 
 // dotenv.config({ path: "./.env" }); // load env from backend/.env
 const app= express()
@@ -20,6 +21,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use("/api/auth", authRouter)
 app.use("/api/user", userRouter)
+
 app.listen(port,()=>{
     connectDb()
     console.log("server is started")
