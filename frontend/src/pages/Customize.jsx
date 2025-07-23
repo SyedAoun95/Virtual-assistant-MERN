@@ -8,6 +8,7 @@ import image5 from "../assets/image5.png";
 import image6 from "../assets/image6.jpeg";
 import image7 from "../assets/image7.jpeg";
 import { RiImageAddLine } from "react-icons/ri";
+import { IoArrowBackSharp } from "react-icons/io5";
 import { userDataContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,6 +38,7 @@ function Customize() {
   return (
     <div className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#030353] flex justify-center items-center flex-col'>
       <h1 className='text-white text-[30px] text-center p-[20px] mb-[30px]'>
+         <IoArrowBackSharp  className='absolute top-[30px] left-[30px] text-white w-[25px] h-[25px] cursor-pointer' onClick={()=>navigate("/")}/>
         Select your <span className='text-blue-300'>Assistant image</span>
       </h1>
 
