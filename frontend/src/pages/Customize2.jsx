@@ -10,6 +10,7 @@ function Customize2() {
   const navigate=useNavigate()
 
   const handleUpdateAssistant = async () => {
+    setLoading(true)
     try {
       let formData = new FormData();
       formData.append("assistantName", assistantName);
@@ -22,10 +23,12 @@ function Customize2() {
       const result = await axios.post(`${serverUrl}/api/user/update`, formData, {
         withCredentials: true
       });
-
+setLoading(formData)
       console.log(result.data);
       setUserData(result.data);
+      navigate("/")
     } catch (error) {
+      setLoading(false)
       console.log(error);
     }
   };
@@ -53,7 +56,7 @@ function Customize2() {
   disabled={loading}
   onClick={async () => {
     await handleUpdateAssistant();
-    navigate("/");
+    // navigate("/");
   }}
 >
   {loading ? "Loading..." : "Finally Create your Assistant"}
