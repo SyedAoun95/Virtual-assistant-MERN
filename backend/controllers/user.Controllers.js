@@ -1,4 +1,6 @@
+import { response } from "express";
 import uploadOnCloudinary from "../config/cloudinary.js";
+import geminiResponse from "../gemini.js";
 import User from "../models/user.model.js";
 
 export const getCurrentUser = async (req, res) => {
@@ -34,5 +36,21 @@ export const updateAssistant=async (req,res)=>{
 
   } catch (error) {
     return res.status(400).json({message:"update assistant error"})
+  }
+}
+//controllerr for gemin api setup 
+export const askToAssistant=async (req,res)=>{
+  try {
+    const {command}=req.body
+    const user=await User.findById(req.userId);
+    const assistantName=user.assistantName
+    const result=await geminiResponse(command,userName,assistantName)
+    const jsonMatch=result.match(/{[\s\S]*}/)
+    if(!jsonMatch){
+      return res.status(400).json({response:"Sorry,I didn't understand your command please re-enter",})
+    }
+    const gemResult=JSON.parse(jsonMatch[0])
+  } catch (error) {
+    
   }
 }
