@@ -86,7 +86,12 @@ try {
     console.log("recognition ended");
     isRecoginizingRef.current= false;
     setListening(false);
-  }
+    if(!isSpeakingRef.current){
+      setTimeout(() => {
+        safeRecogination()
+      }, 1000);
+    }
+  };
 
 
   recognition.onresult =async (e) => {
