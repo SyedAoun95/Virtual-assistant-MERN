@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { userDataContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useEffect } from 'react';
 
 function Home() {
   const {userData,serverUrl,setUserData } = useContext(userDataContext); 
@@ -17,6 +18,20 @@ const handleLogOut=async()=>{
     console.log(error)
   }
 }
+useEffect(() => {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (e) => {
+    const transcript = e.results[e.results.length - 1][0].transcript.trim();
+    console.log("heard: " + transcript);
+  };
+
+  recognition.start();
+}, []);
+
 
 
   return (
