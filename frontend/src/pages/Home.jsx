@@ -18,7 +18,10 @@ const handleLogOut=async()=>{
     console.log(error)
   }
 }
-
+const speak = (text) => {
+    const utterance = new SpeechSynthesisUtterance(text)
+    window.speechSynthesis.speak(utterance)
+}
 useEffect(() => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
@@ -31,10 +34,13 @@ useEffect(() => {
     if(transcript.toLowerCase().includes(userData.assistantName.toLowerCase())){
       const data=await getGeminiResponse(transcript)
       console.log(data)
+      speak(data.response)
     }
   };
 
   recognition.start();
+
+  
    
 }, []);
 
