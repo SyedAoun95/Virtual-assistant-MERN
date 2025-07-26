@@ -51,6 +51,7 @@ export const askToAssistant=async (req,res)=>{
     }
     const gemResult=JSON.parse(jsonMatch[0])
     const type=gemResult.type
+   //for date time day month finding
     switch(type){
       case 'get-date' :
         return res.json({
@@ -64,6 +65,20 @@ export const askToAssistant=async (req,res)=>{
           type,
           userInput:gemResult.userInput,
           response:`current time is ${moment().format("hh:mm A")}`
+           
+        });
+         case 'get-day':
+           return res.json({
+          type,
+          userInput:gemResult.userInput,
+          response:` today is ${moment().format("dddd")}`
+           
+        });
+         case 'get-month':
+           return res.json({
+          type,
+          userInput:gemResult.userInput,
+          response:` Today is ${moment().format("MMMM")}`
            
         });
     }
