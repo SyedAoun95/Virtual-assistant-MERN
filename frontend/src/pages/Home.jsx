@@ -5,7 +5,7 @@ import axios from "axios";
 import { useEffect } from 'react';
 
 function Home() {
-  const {userData,serverUrl,setUserData } = useContext(userDataContext); 
+  const {userData,serverUrl,setUserData, getGeminiResponse } = useContext(userDataContext); 
 const navigate=useNavigate()
 const handleLogOut=async()=>{
   try {
@@ -24,12 +24,17 @@ useEffect(() => {
   recognition.continuous = true;
   recognition.lang = 'en-US';
 
-  recognition.onresult = (e) => {
+  recognition.onresult =async (e) => {
     const transcript = e.results[e.results.length - 1][0].transcript.trim();
-    console.log("heard: " + transcript);
+    console.log("heard: " + transcript)
+    if(transcript.toLowerCase().includes(userData.assistantName.toLowerCase())){
+      const data=await getGeminiResponse(transcript)
+      console.log(data)
+    }
   };
 
   recognition.start();
+   
 }, []);
 
 
