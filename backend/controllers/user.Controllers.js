@@ -46,6 +46,7 @@ export const updateAssistant = async (req, res) => {
 };
 
 // Ask Assistant
+
 export const askToAssistant = async (req, res) => {
   try {
     const { command } = req.body;
@@ -56,9 +57,10 @@ export const askToAssistant = async (req, res) => {
     }
 
     const assistantName = user.assistantName;
-    const userName = user.name; //  FIXED: define userName
+    const userName = user.name;
 
-    const result = await geminiResponse(command, userName, assistantName);
+    const result = await geminiResponse(command, assistantName, userName);
+    console.log("Gemini raw result:", result);
 
     const jsonMatch = result.match(/{[\s\S]*}/);
     if (!jsonMatch) {
@@ -71,28 +73,28 @@ export const askToAssistant = async (req, res) => {
     const type = gemResult.type;
 
     switch (type) {
-      case 'get-date':
+      case 'get_date':
         return res.json({
           type,
           userInput: gemResult.userInput,
           response: `Current date is ${moment().format("YYYY-MM-DD")}`,
         });
 
-      case 'get-time':
+      case 'get_time':
         return res.json({
           type,
           userInput: gemResult.userInput,
           response: `Current time is ${moment().format("hh:mm A")}`,
         });
 
-      case 'get-day':
+      case 'get_day':
         return res.json({
           type,
           userInput: gemResult.userInput,
           response: `Today is ${moment().format("dddd")}`,
         });
 
-      case 'get-month':
+      case 'get_month':
         return res.json({
           type,
           userInput: gemResult.userInput,
@@ -119,7 +121,7 @@ export const askToAssistant = async (req, res) => {
         });
     }
   } catch (error) {
-    console.error("askToAssistant error:", error); // log full error
+    console.error("askToAssistant error:", error);
     return res.status(500).json({ response: "Ask assistant error", error: error.message });
   }
 };
