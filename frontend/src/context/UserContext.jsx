@@ -26,6 +26,7 @@ const UserProvider = ({ children }) => {
       setLoading(false); // ✅ finish loading
     }
   };
+  
 
   useEffect(() => {
     handleCurrentUser();

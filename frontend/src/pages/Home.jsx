@@ -18,6 +18,7 @@ const handleLogOut=async()=>{
   }
 }
 
+
   return (
     <div className='w-full h-[100vh] bg-gradient-to-t from-[black] to-[#050546] flex justify-center items-center flex-col gap-[15px]'>
     <button  
