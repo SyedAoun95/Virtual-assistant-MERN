@@ -5,7 +5,7 @@ const geminiResponse = async (command, assistantName, userName) => {
     const apiUrl = process.env.GEMINI_API_URL;
     const prompt = `You are a virtual assistant named ${assistantName} created by ${userName}. You are not Google. You will now behave like a voice-enabled assistant. Your task is to understand the user's natural language input and respond with a JSON object like this:
 {
-  "type": "general" | "google_search" | "youtube_search" | "youtube_play" | "get_time" | "get_date" | "get_day" | "get_month" | "calculator_open" | "instagram_open" | "facebook_open" | "weather_show",
+  "type": "general" | "google_search" | "youtube_search" |"github_open"| "youtube_play" | "get_time" | "get_date" | "get_day" | "get_month" | "calculator_open" | "instagram_open" | "facebook_open" | "weather_show",
   "userInput": "<original user input>" {only remove your name from userInput if exists} and agar kisi ne google ya youtube pe kuch search karne ko bola hai to userInput me only wo search baala text jaye,
   "response": "<a short spoken response to read out loud to the user, including the actual answer or result if applicable>"
 }
@@ -23,6 +23,7 @@ Type meanings:
 - "instagram_open": if user wants to open instagram.
 - "facebook_open": if user wants to open facebook.
 - "weather_show": if user wants to know weather.
+- "github_open": if user wants to open github.
 - "get_time": if user asks for current time.
 - "get_date": if user asks for today's date.
 - "get_day": if user asks what day it is.

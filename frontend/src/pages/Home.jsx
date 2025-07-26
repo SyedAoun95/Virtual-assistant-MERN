@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'; 
+import React, { useContext, useRef, useState } from 'react'; 
 import { userDataContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -7,6 +7,9 @@ import { useEffect } from 'react';
 function Home() {
   const {userData,serverUrl,setUserData, getGeminiResponse } = useContext(userDataContext); 
 const navigate=useNavigate()
+ const [listening,setListening]=useState(false)
+ const isSpeakingRef=useRef(false)
+ const recognitionRef=useRef(null )
 const handleLogOut=async()=>{
   try {
     const result=await axios.get(`${serverUrl}/api/auth/logout`,{withCredentials:true})
@@ -40,6 +43,9 @@ if (type === 'instagram_open') {
 
 if (type === 'facebook_open') {
   window.open('https://www.facebook.com/', '_blank');
+}
+if (type === 'github_open') {
+  window.open('https://github.com/', '_blank');
 }
 if (type === "weather_show") {
   window.open('https://www.google.com/search?q=weather', '_blank');
