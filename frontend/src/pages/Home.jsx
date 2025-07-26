@@ -22,6 +22,34 @@ const speak = (text) => {
     const utterance = new SpeechSynthesisUtterance(text)
     window.speechSynthesis.speak(utterance)
 }
+const handleCommand = (data) => {
+  const { type, userInput, response } = data;
+  speak(response);
+
+  if (type === 'google_search') {
+    const query = encodeURIComponent(userInput);
+    window.open(`https://www.google.com/search?q=${query}`, '_blank');
+  }
+  if (type === 'calculator_open') {
+  window.open('https://www.google.com/search?q=calculator', '_blank');
+}
+
+if (type === 'instagram_open') {
+  window.open('https://www.instagram.com/', '_blank');
+}
+
+if (type === 'facebook_open') {
+  window.open('https://www.facebook.com/', '_blank');
+}
+if (type === "weather_show") {
+  window.open('https://www.google.com/search?q=weather', '_blank');
+}
+
+if (type === 'youtube_search' || type === 'youtube_play') {
+  const query = encodeURIComponent(userInput);
+  window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank');
+}
+}
 useEffect(() => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognition = new SpeechRecognition();
@@ -33,8 +61,9 @@ useEffect(() => {
     console.log("heard: " + transcript)
     if(transcript.toLowerCase().includes(userData.assistantName.toLowerCase())){
       const data=await getGeminiResponse(transcript)
-      console.log(data)
-      speak(data.response)
+   console.log(data)
+     handleCommand(data)
+
     }
   };
 
