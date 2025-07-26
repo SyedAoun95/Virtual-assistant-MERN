@@ -2,7 +2,7 @@ import { response } from "express";
 import uploadOnCloudinary from "../config/cloudinary.js";
 import geminiResponse from "../gemini.js";
 import User from "../models/user.model.js";
-
+import moment from "moment";
 export const getCurrentUser = async (req, res) => {
   try {
     const userId = req.userId;
@@ -50,7 +50,26 @@ export const askToAssistant=async (req,res)=>{
       return res.status(400).json({response:"Sorry,I didn't understand your command please re-enter",})
     }
     const gemResult=JSON.parse(jsonMatch[0])
+    const type=gemResult.type
+    switch(type){
+      case 'get-date' :
+        return res.json({
+          type,
+          userInput:gemResult.userInput,
+          response:`current date is ${moment().format("YYY-MM-DD")}`
+           
+        });
+        case 'get-time':
+           return res.json({
+          type,
+          userInput:gemResult.userInput,
+          response:`current time is ${moment().format("hh:mm A")}`
+           
+        });
+    }
+
   } catch (error) {
     
   }
 }
+ 
