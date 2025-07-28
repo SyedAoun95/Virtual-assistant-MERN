@@ -118,7 +118,7 @@ function Home() {
       </button>
 
       <button
-        className='min-w-[120px] absolute top-[75px] right-[20px] h-[45px] text-[16px] bg-white text-black font-semibold rounded-full px-[16px] py-[8px] cursor-pointer'
+        className='min-w-[180px] absolute top-[75px] right-[20px] h-[45px] text-[16px] bg-white text-black font-semibold rounded-full px-[16px] py-[8px] cursor-pointer'
         onClick={() => navigate("/customize")}
       >
         Customize your Assistant
@@ -137,29 +137,30 @@ function Home() {
         onClick={startListening}
         className="bg-white text-black font-semibold rounded-full px-6 py-2 text-[16px] h-[45px] shadow-md hover:shadow-lg transition-all duration-200"
       >
-        Ask anything🎙️
+        Start Listening 🎙️
       </button>
 
       {/* Voice Controls */}
       <div className="flex gap-2 absolute top-[190px] right-[20px]">
-        <select
-          className="h-[45px] text-[16px] rounded-full bg-white text-black font-semibold px-4 cursor-pointer shadow-md"
-          onChange={(e) => {
-            const voice = voicesRef.current.find(v => v.name === e.target.value);
-            setSelectedVoice(voice);
-          }}
-          value={selectedVoice?.name || ''}
-        >
-          {voicesRef.current.map((voice, idx) => (
-            <option key={idx} value={voice.name}>
-              {voice.name}
-            </option>
-          ))}
-        </select>
+      <select
+  className="h-[36px] min-w-[140px] text-[14px] rounded-full bg-white text-black font-semibold px-2 cursor-pointer shadow-md"
+  onChange={(e) => {
+    const voice = voicesRef.current.find(v => v.name === e.target.value);
+    setSelectedVoice(voice);
+  }}
+  value={selectedVoice?.name || ''}
+>
+  {voicesRef.current.map((voice, idx) => (
+    <option key={idx} value={voice.name}>
+      {voice.name}
+    </option>
+  ))}
+</select>
+
 
         <button
           onClick={() => speak("Hi, I am your assistant.")}
-          className="bg-white text-black font-semibold rounded-full px-4 h-[45px] text-[16px] hover:shadow-md cursor-pointer"
+          className="bg-white text-black font-semibold rounded-full px-4 h-[45px] min-w-[180px] text-[16px] hover:shadow-md cursor-pointer"
         >
           Preview Voice
         </button>
