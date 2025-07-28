@@ -62,36 +62,22 @@ useEffect(() => {
   const recognition = new SpeechRecognition();
   recognition.continuous = true;
   recognition.lang = 'en-US';
- recognitionRef.current=recognition
- const isRecoginizingRef={current:false}
+//  recognitionRef.current=recognition
+//  const isRecoginizingRef={current:false}
 
- const safeRecogination=()=>{
-  if(!isSpeakingRef && !isRecoginizingRef){
-try {
-  recognition.start();
-  console.log("Recogination requested to start")
-} catch (err) {
-  if(err.name !=="InvalidStateError"){
-    console.log("start error",err);
-  }
-}
-  }
- }
-  recognition.onstart = () =>{
-    console.log("recognition started");
-    isRecoginizingRef.current= true;
-    setListening(true);
-  };
-  recognition.onend = () => {
-    console.log("recognition ended");
-    isRecoginizingRef.current= false;
-    setListening(false);
-    if(!isSpeakingRef.current){
-      setTimeout(() => {
-        safeRecogination()
-      }, 1000);
-    }
-  };
+//  const safeRecogination=()=>{
+//   if(!isSpeakingRef && !isRecoginizingRef){
+// try {
+//   recognition.start();
+//   console.log("Recogination requested to start")
+// } catch (err) {
+//   if(err.name !=="InvalidStateError"){
+//     console.log("start error",err);
+//   }
+// }
+//   }
+//  }
+
 
 
   recognition.onresult =async (e) => {
@@ -105,7 +91,7 @@ try {
     }
   };
 
-  
+  recognition.start()
 
   
    
