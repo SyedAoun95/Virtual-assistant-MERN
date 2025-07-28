@@ -9,7 +9,7 @@ import image6 from "../assets/image6.jpeg";
 import image7 from "../assets/image7.jpeg";
 import { RiImageAddLine } from "react-icons/ri";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { userDataContext } from '../context/userContext';
+import { userDataContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 function Customize() {
