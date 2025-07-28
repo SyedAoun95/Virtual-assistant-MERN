@@ -2,6 +2,8 @@ import React, { useContext, useRef, useState, useEffect } from 'react';
 import { userDataContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import ai from '../assets/ai.gif';
+import userr from '../assets/user.gif';
 
 function Home() {
   const { userData, serverUrl, setUserData, getGeminiResponse } = useContext(userDataContext);
@@ -11,8 +13,10 @@ function Home() {
   const voicesRef = useRef([]);
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [listening, setListening] = useState(false);
+  const [responseText, setResponseText] = useState("");
+  const [speakingState, setSpeakingState] = useState("idle"); // 'user', 'ai', 'idle'
 
-  // Load voices and set default
+  // Load voices
   useEffect(() => {
     const loadVoices = () => {
       voicesRef.current = synth.getVoices();
@@ -35,10 +39,15 @@ function Home() {
   }, []);
 
   const speak = (text) => {
+    if (!text || typeof text !== 'string') return;
     const utterance = new SpeechSynthesisUtterance(text);
     if (selectedVoice) {
       utterance.voice = selectedVoice;
     }
+
+    utterance.onstart = () => setSpeakingState("ai");
+    utterance.onend = () => setSpeakingState("idle");
+
     synth.speak(utterance);
   };
 
@@ -53,57 +62,84 @@ function Home() {
     }
   };
 
-  const handleCommand = (data) => {
-    const { type, userInput, response } = data;
-    speak(response);
+  // Animate response word by word
+  const typeResponse = (text) => {
+    if (!text || typeof text !== "string") return;
+    const words = text.trim().split(/\s+/);
+    setResponseText("");
+    let index = 0;
 
-    if (type === 'google_search') {
-      const query = encodeURIComponent(userInput);
-      window.open(`https://www.google.com/search?q=${query}`, '_blank');
-    }
-    if (type === 'calculator_open') {
-      window.open('https://www.google.com/search?q=calculator', '_blank');
-    }
-    if (type === 'instagram_open') {
-      window.open('https://www.instagram.com/', '_blank');
-    }
-    if (type === 'facebook_open') {
-      window.open('https://www.facebook.com/', '_blank');
-    }
-    if (type === 'github_open') {
-      window.open('https://github.com/', '_blank');
-    }
-    if (type === "weather_show") {
-      window.open('https://www.google.com/search?q=weather', '_blank');
-    }
-    if (type === 'youtube_search' || type === 'youtube_play') {
-      const query = encodeURIComponent(userInput);
-      window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank');
-    }
+    const interval = setInterval(() => {
+      setResponseText(prev => prev + (index === 0 ? words[index] : " " + words[index]));
+      index++;
+      if (index >= words.length) {
+        clearInterval(interval);
+      }
+    }, 150);
   };
 
-  const startListening = () => {
+  const handleCommand = (data) => {
+    const { type, userInput, response } = data;
+    if (typeof response === "string" && response.trim() !== "") {
+      speak(response);
+      typeResponse(response);
+    } else {
+      setResponseText("Sorry, I didn't get that.");
+    }
+
+    // Handle special actions
+    const query = encodeURIComponent(userInput);
+    if (type === 'google_search') window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    if (type === 'calculator_open') window.open('https://www.google.com/search?q=calculator', '_blank');
+    if (type === 'instagram_open') window.open('https://www.instagram.com/', '_blank');
+    if (type === 'facebook_open') window.open('https://www.facebook.com/', '_blank');
+    if (type === 'github_open') window.open('https://github.com/', '_blank');
+    if (type === "weather_show") window.open('https://www.google.com/search?q=weather', '_blank');
+    if (type === 'youtube_search' || type === 'youtube_play') window.open(`https://www.youtube.com/results?search_query=${query}`, '_blank');
+  };
+
+  const toggleListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.continuous = true;
-    recognition.lang = 'en-US';
 
-    recognition.onresult = async (e) => {
-      const transcript = e.results[e.results.length - 1][0].transcript.trim();
-      console.log("heard: " + transcript);
-      if (transcript.toLowerCase().includes(userData.assistantName.toLowerCase())) {
-        const data = await getGeminiResponse(transcript);
-        console.log(data);
-        handleCommand(data);
-      }
-    };
+    if (!SpeechRecognition) {
+      alert("Speech recognition not supported in your browser.");
+      return;
+    }
 
-    try {
-      recognition.start();
+    if (!recognitionRef.current) {
+      const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
+      recognition.continuous = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = async (e) => {
+        const transcript = e.results[e.results.length - 1][0].transcript.trim();
+        console.log("heard: " + transcript);
+        setSpeakingState("user");
+
+        if (transcript.toLowerCase().includes(userData.assistantName.toLowerCase())) {
+          const data = await getGeminiResponse(transcript);
+          console.log(data);
+          handleCommand(data);
+          setSpeakingState("idle");
+        }
+      };
+
+      recognition.onend = () => {
+        setListening(false);
+        setSpeakingState("idle");
+      };
+    }
+
+    if (!listening) {
+      setResponseText("");
+      recognitionRef.current.start();
       setListening(true);
-    } catch (err) {
-      console.error("Error starting recognition:", err);
+      setSpeakingState("user");
+    } else {
+      recognitionRef.current.stop();
+      setListening(false);
+      setSpeakingState("idle");
     }
   };
 
@@ -129,37 +165,51 @@ function Home() {
         <img src={userData?.assistantImage} alt="Assistant" className='h-full object-cover rounded-4xl' />
       </div>
 
-      {/* Assistant Name */}
-      <h1 className='text-white text-[18px] font-semibold'>I'm {userData?.assistantName}</h1>
+      {/* Response Text or Assistant Name */}
+      <h1 className='text-white text-[18px] font-semibold text-center px-4 min-h-[48px]'>
+        {responseText || `I'm ${userData?.assistantName}`}
+      </h1>
 
-      {/* Start Listening Button */}
-      <button
-        onClick={startListening}
-        className="bg-white text-black font-semibold rounded-full px-6 py-2 text-[16px] h-[45px] shadow-md hover:shadow-lg transition-all duration-200"
-      >
-        Start Listening 🎙️
-      </button>
+      {/* Dynamic Mic Animation */}
+      <div
+  className='cursor-pointer mt-2'
+  onClick={toggleListening}
+  title={listening ? "Click to stop listening" : "Click to start listening"}
+>
+  {speakingState === 'user' && (
+    <img src={userr} alt="User Speaking" className='w-[150px] h-[150px]' />
+  )}
+  {speakingState === 'ai' && (
+    <img src={ai} alt="AI Speaking" className='w-[150px] h-[150px]' />
+  )}
+  {speakingState === 'idle' && (
+    <img src={ai} alt="Idle" className='w-[150px] h-[150px] opacity-50' />
+  )}
+</div>
+
 
       {/* Voice Controls */}
       <div className="flex gap-2 absolute top-[190px] right-[20px]">
-      <select
-  className="h-[45px] w-[100px] text-[14px] rounded-full bg-white text-black font-semibold px-2 cursor-pointer shadow-md"
-  onChange={(e) => {
-    const voice = voicesRef.current.find(v => v.name === e.target.value);
-    setSelectedVoice(voice);
-  }}
-  value={selectedVoice?.name || ''}
->
-  {voicesRef.current.map((voice, idx) => (
-    <option key={idx} value={voice.name}>
-      {voice.name}
-    </option>
-  ))}
-</select>
-
+        <select
+          className="h-[45px] w-[150px] text-[14px] rounded-full bg-white text-black font-semibold px-2 cursor-pointer shadow-md"
+          onChange={(e) => {
+            const voice = voicesRef.current.find(v => v.name === e.target.value);
+            setSelectedVoice(voice);
+          }}
+          value={selectedVoice?.name || ''}
+        >
+          <option value="" disabled hidden>
+            Choose your voice
+          </option>
+          {voicesRef.current.map((voice, idx) => (
+            <option key={idx} value={voice.name}>
+              {voice.name}
+            </option>
+          ))}
+        </select>
 
         <button
-          onClick={() => speak("Hi, I am your assistant.")}
+          onClick={() => speak("Han sangi")}
           className="bg-white text-black font-semibold rounded-full px-4 h-[45px] min-w-[180px] text-[16px] hover:shadow-md cursor-pointer"
         >
           Preview Voice
