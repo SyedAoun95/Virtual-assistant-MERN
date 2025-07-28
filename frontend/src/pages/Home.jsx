@@ -15,7 +15,7 @@ function Home() {
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [listening, setListening] = useState(false);
   const [responseText, setResponseText] = useState("");
-  const [speakingState, setSpeakingState] = useState("idle"); // 'user', 'ai', 'idle'
+  const [speakingState, setSpeakingState] = useState("idle"); 
 
   // Load voices
   useEffect(() => {
@@ -146,7 +146,7 @@ function Home() {
 
   return (
     <div className='w-full h-[100vh] bg-gradient-to-t from-black to-[#050546] flex justify-center items-center flex-col gap-[15px] relative'>
-      {/* Logout & Customize */}
+    
       <button
         className='min-w-[120px] absolute top-[20px] right-[20px] h-[45px] text-[16px] bg-white text-black font-semibold rounded-full cursor-pointer'
         onClick={handleLogOut}
@@ -161,17 +161,17 @@ function Home() {
         Customize your Assistant
       </button>
 
-      {/* Assistant Image */}
+   
       <div className='w-[300px] h-[400px] flex justify-center items-center overflow-hidden rounded-4xl shadow-lg'>
         <img src={userData?.assistantImage} alt="Assistant" className='h-full object-cover rounded-4xl' />
       </div>
 
-      {/* Response Text or Assistant Name */}
+     
       <h1 className='text-white text-[18px] font-semibold text-center px-4 min-h-[48px]'>
         {responseText || `I'm ${userData?.assistantName}`}
       </h1>
 
-      {/* Dynamic Mic Animation */}
+
       <div
   className='cursor-pointer mt-2'
   onClick={toggleListening}
@@ -189,7 +189,7 @@ function Home() {
 </div>
 
 
-      {/* Voice Controls */}
+
       <div className="flex gap-2 absolute top-[190px] right-[20px]">
         <select
           className="h-[45px] w-[150px] text-[14px] rounded-full bg-white text-black font-semibold px-2 cursor-pointer shadow-md"
