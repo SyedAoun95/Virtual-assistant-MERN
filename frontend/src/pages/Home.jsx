@@ -143,7 +143,7 @@ function Home() {
       {/* Voice Controls */}
       <div className="flex gap-2 absolute top-[190px] right-[20px]">
       <select
-  className="h-[36px] min-w-[140px] text-[14px] rounded-full bg-white text-black font-semibold px-2 cursor-pointer shadow-md"
+  className="h-[45px] w-[100px] text-[14px] rounded-full bg-white text-black font-semibold px-2 cursor-pointer shadow-md"
   onChange={(e) => {
     const voice = voicesRef.current.find(v => v.name === e.target.value);
     setSelectedVoice(voice);
