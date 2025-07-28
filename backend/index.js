@@ -13,7 +13,10 @@ const app= express()
 const port= process.env.PORT || 5000
 
 app.use(cors({
-  origin: "http://localhost:5173",
+ origin: [
+    "http://localhost:5173",
+    "https://virtual-assistant-mern-i84i.onrender.com"
+  ],
   credentials: true
 }))
 //convert the data into json format 
