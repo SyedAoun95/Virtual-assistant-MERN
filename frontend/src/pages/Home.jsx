@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ai from '../assets/ai.gif';
 import userr from '../assets/user.gif';
+import mic from '../assets/mic.gif';
 
 function Home() {
   const { userData, serverUrl, setUserData, getGeminiResponse } = useContext(userDataContext);
@@ -14,7 +15,7 @@ function Home() {
   const [selectedVoice, setSelectedVoice] = useState(null);
   const [listening, setListening] = useState(false);
   const [responseText, setResponseText] = useState("");
-  const [speakingState, setSpeakingState] = useState("idle"); // 'user', 'ai', 'idle'
+  const [speakingState, setSpeakingState] = useState("idle"); // 'idle', 'user', 'ai'
 
   // Load voices
   useEffect(() => {
@@ -87,7 +88,6 @@ function Home() {
       setResponseText("Sorry, I didn't get that.");
     }
 
-    // Handle special actions
     const query = encodeURIComponent(userInput);
     if (type === 'google_search') window.open(`https://www.google.com/search?q=${query}`, '_blank');
     if (type === 'calculator_open') window.open('https://www.google.com/search?q=calculator', '_blank');
@@ -121,8 +121,9 @@ function Home() {
           const data = await getGeminiResponse(transcript);
           console.log(data);
           handleCommand(data);
-          setSpeakingState("idle");
         }
+
+        setSpeakingState("idle");
       };
 
       recognition.onend = () => {
@@ -170,23 +171,18 @@ function Home() {
         {responseText || `I'm ${userData?.assistantName}`}
       </h1>
 
-      {/* Dynamic Mic Animation */}
+      {/* Animation Switch */}
       <div
-  className='cursor-pointer mt-2'
-  onClick={toggleListening}
-  title={listening ? "Click to stop listening" : "Click to start listening"}
->
-  {speakingState === 'user' && (
-    <img src={userr} alt="User Speaking" className='w-[150px] h-[150px]' />
-  )}
-  {speakingState === 'ai' && (
-    <img src={ai} alt="AI Speaking" className='w-[150px] h-[150px]' />
-  )}
-  {speakingState === 'idle' && (
-    <img src={ai} alt="Idle" className='w-[150px] h-[150px] opacity-50' />
-  )}
-</div>
-
+        className='cursor-pointer mt-4'
+        onClick={toggleListening}
+        title={listening ? "Click to stop listening" : "Click to start listening"}
+      >
+        {speakingState === 'ai' ? (
+          <img src={userr} alt="AI Responding" className='w-[160px] h-[160px]' />
+        ) : (
+          <img src={mic} alt="Mic Idle" className='w-[130px] h-[100px] rounded-4xl' />
+        )}
+      </div>
 
       {/* Voice Controls */}
       <div className="flex gap-2 absolute top-[190px] right-[20px]">
