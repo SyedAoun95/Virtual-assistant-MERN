@@ -4,7 +4,7 @@ import React, { createContext, useEffect, useState } from 'react'
 export const userDataContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const serverUrl = 'http://localhost:8000';
+  const serverUrl = 'https://virtual-assistant-mern.onrender.com';
 
   const [userData, setUserData] = useState(null);
   const [frontendImage, setfrontendimage] = useState(null);
