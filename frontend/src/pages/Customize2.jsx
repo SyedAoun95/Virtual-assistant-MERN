@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { userDataContext } from '../context/userContext';
+import { userDataContext } from '../context/UserContext';
 import axios from 'axios';
 import { IoArrowBackSharp } from "react-icons/io5";
 import { Navigate, useNavigate } from 'react-router-dom';
